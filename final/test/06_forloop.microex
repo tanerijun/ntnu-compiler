@@ -1,0 +1,20 @@
+%%Test for FOR loop with both TO and DOWNTO
+
+Program ForDirectionTest
+
+Begin
+  declare i, sum1, sum2 as integer;
+
+  %% Test counting up with TO
+  sum1 := 0;
+  for (i := 1 to 5)
+    sum1 := sum1 + i;
+  endfor
+
+  %% Test counting down with DOWNTO
+  sum2 := 0;
+  for (i := 10 downto 5)
+    sum2 := sum2 + i;
+  endfor
+
+end

@@ -1,0 +1,307 @@
+   0  $accept : statement_list $end
+
+   1  statement_list : statement '\n'
+   2                 | statement_list statement '\n'
+
+   3  statement : NAME '=' expression
+   4            | expression
+   5            | error '\n'
+
+   6  expression : expression '+' expression
+   7             | expression '-' expression
+   8             | expression '*' expression
+   9             | expression '/' expression
+  10             | '-' expression
+  11             | '(' expression ')'
+  12             | NUMBER
+  13             | NAME
+
+state 0
+	$accept : . statement_list $end  (0)
+
+	error  shift 1
+	NAME  shift 2
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	statement_list  goto 6
+	expression  goto 7
+	statement  goto 8
+
+
+state 1
+	statement : error . '\n'  (5)
+
+	'\n'  shift 9
+	.  error
+
+
+state 2
+	statement : NAME . '=' expression  (3)
+	expression : NAME .  (13)
+
+	'='  shift 10
+	'-'  reduce 13
+	'+'  reduce 13
+	'*'  reduce 13
+	'/'  reduce 13
+	'\n'  reduce 13
+
+
+state 3
+	expression : NUMBER .  (12)
+
+	.  reduce 12
+
+
+state 4
+	expression : '-' . expression  (10)
+
+	NAME  shift 11
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	expression  goto 12
+
+
+state 5
+	expression : '(' . expression ')'  (11)
+
+	NAME  shift 11
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	expression  goto 13
+
+
+state 6
+	$accept : statement_list . $end  (0)
+	statement_list : statement_list . statement '\n'  (2)
+
+	$end  accept
+	error  shift 1
+	NAME  shift 2
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	expression  goto 7
+	statement  goto 14
+
+
+state 7
+	statement : expression .  (4)
+	expression : expression . '+' expression  (6)
+	expression : expression . '-' expression  (7)
+	expression : expression . '*' expression  (8)
+	expression : expression . '/' expression  (9)
+
+	'-'  shift 15
+	'+'  shift 16
+	'*'  shift 17
+	'/'  shift 18
+	'\n'  reduce 4
+
+
+state 8
+	statement_list : statement . '\n'  (1)
+
+	'\n'  shift 19
+	.  error
+
+
+state 9
+	statement : error '\n' .  (5)
+
+	.  reduce 5
+
+
+state 10
+	statement : NAME '=' . expression  (3)
+
+	NAME  shift 11
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	expression  goto 20
+
+
+state 11
+	expression : NAME .  (13)
+
+	.  reduce 13
+
+
+state 12
+	expression : expression . '+' expression  (6)
+	expression : expression . '-' expression  (7)
+	expression : expression . '*' expression  (8)
+	expression : expression . '/' expression  (9)
+	expression : '-' expression .  (10)
+
+	.  reduce 10
+
+
+state 13
+	expression : expression . '+' expression  (6)
+	expression : expression . '-' expression  (7)
+	expression : expression . '*' expression  (8)
+	expression : expression . '/' expression  (9)
+	expression : '(' expression . ')'  (11)
+
+	'-'  shift 15
+	'+'  shift 16
+	'*'  shift 17
+	'/'  shift 18
+	')'  shift 21
+	.  error
+
+
+state 14
+	statement_list : statement_list statement . '\n'  (2)
+
+	'\n'  shift 22
+	.  error
+
+
+state 15
+	expression : expression '-' . expression  (7)
+
+	NAME  shift 11
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	expression  goto 23
+
+
+state 16
+	expression : expression '+' . expression  (6)
+
+	NAME  shift 11
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	expression  goto 24
+
+
+state 17
+	expression : expression '*' . expression  (8)
+
+	NAME  shift 11
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	expression  goto 25
+
+
+state 18
+	expression : expression '/' . expression  (9)
+
+	NAME  shift 11
+	NUMBER  shift 3
+	'-'  shift 4
+	'('  shift 5
+	.  error
+
+	expression  goto 26
+
+
+state 19
+	statement_list : statement '\n' .  (1)
+
+	.  reduce 1
+
+
+state 20
+	statement : NAME '=' expression .  (3)
+	expression : expression . '+' expression  (6)
+	expression : expression . '-' expression  (7)
+	expression : expression . '*' expression  (8)
+	expression : expression . '/' expression  (9)
+
+	'-'  shift 15
+	'+'  shift 16
+	'*'  shift 17
+	'/'  shift 18
+	'\n'  reduce 3
+
+
+state 21
+	expression : '(' expression ')' .  (11)
+
+	.  reduce 11
+
+
+state 22
+	statement_list : statement_list statement '\n' .  (2)
+
+	.  reduce 2
+
+
+state 23
+	expression : expression . '+' expression  (6)
+	expression : expression . '-' expression  (7)
+	expression : expression '-' expression .  (7)
+	expression : expression . '*' expression  (8)
+	expression : expression . '/' expression  (9)
+
+	'*'  shift 17
+	'/'  shift 18
+	'-'  reduce 7
+	'+'  reduce 7
+	'\n'  reduce 7
+	')'  reduce 7
+
+
+state 24
+	expression : expression . '+' expression  (6)
+	expression : expression '+' expression .  (6)
+	expression : expression . '-' expression  (7)
+	expression : expression . '*' expression  (8)
+	expression : expression . '/' expression  (9)
+
+	'*'  shift 17
+	'/'  shift 18
+	'-'  reduce 6
+	'+'  reduce 6
+	'\n'  reduce 6
+	')'  reduce 6
+
+
+state 25
+	expression : expression . '+' expression  (6)
+	expression : expression . '-' expression  (7)
+	expression : expression . '*' expression  (8)
+	expression : expression '*' expression .  (8)
+	expression : expression . '/' expression  (9)
+
+	.  reduce 8
+
+
+state 26
+	expression : expression . '+' expression  (6)
+	expression : expression . '-' expression  (7)
+	expression : expression . '*' expression  (8)
+	expression : expression . '/' expression  (9)
+	expression : expression '/' expression .  (9)
+
+	.  reduce 9
+
+
+13 terminals, 4 nonterminals
+14 grammar rules, 27 states

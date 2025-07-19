@@ -1,0 +1,8 @@
+Script started on Mon 29 Mar 2021 05:08:04 PM CST
+ghhwang@telnet:~/CompilerPrograms$ lex ch1-02.l
+ghhwang@telnet:~/CompilerPrograms$ !gcc
+gcc lex.yy.c -lfl
+ghhwang@telnet:~/CompilerPrograms$ exit
+exit
+
+Script done on Mon 29 Mar 2021 05:08:15 PM CST

@@ -1,0 +1,130 @@
+Script started on Thu Apr  3 00:26:17 2025
+[1m[7m%[27m[1m[0m                                                                                                                              ]2;tvince@VCT-Air:~/Projects/ntnu-compiler/midterm]1;..piler/midterm]7;file://VCT-Air.local/Users/tvince/Projects/ntnu-compiler/midterm\[0m[27m[24m[J[01;35mmidterm [01;35m% [00m[K[?1h=[?2004hllex 61347090S_micro_ex_scanner.l[?1l>[?2004l
+]2;lex 61347090S_micro_ex_scanner.l]1;lex[1m[7m%[27m[1m[0m                                                                                                                              ]2;tvince@VCT-Air:~/Projects/ntnu-compiler/midterm]1;..piler/midterm]7;file://VCT-Air.local/Users/tvince/Projects/ntnu-compiler/midterm\[0m[27m[24m[J[01;35mmidterm [01;35m% [00m[K[?1h=[?2004h[7mgcc lex.yy.c -o micro_ex_scanner -L/opt/homebrew/Cellar/flex/2.6.4_2/lib -lfl[27m[77D[27mg[27mc[27mc[27m [27ml[27me[27mx[27m.[27my[27my[27m.[27mc[27m [27m-[27mo[27m [27mm[27mi[27mc[27mr[27mo[27m_[27me[27mx[27m_[27ms[27mc[27ma[27mn[27mn[27me[27mr[27m [27m-[27mL[27m/[27mo[27mp[27mt[27m/[27mh[27mo[27mm[27me[27mb[27mr[27me[27mw[27m/[27mC[27me[27ml[27ml[27ma[27mr[27m/[27mf[27ml[27me[27mx[27m/[27m2[27m.[27m6[27m.[27m4[27m_[27m2[27m/[27ml[27mi[27mb[27m [27m-[27ml[27mf[27ml[1C[P[52C [53D[P[52C [53D[P[52C [53D[P[52C [53D[P[52C [53D[P[52C [53D[P[52C [53D[P[52C [53D[P[52C [53D[P[52C [53D scanner -L/opt/homebrew/Cellar/flex/2.6.4_2/lib -lfl[52D[?1l>[?2004l
+]2;gcc lex.yy.c -o scanner -L/opt/homebrew/Cellar/flex/2.6.4_2/lib -lfl]1;gcc[1m[7m%[27m[1m[0m                                                                                                                              ]2;tvince@VCT-Air:~/Projects/ntnu-compiler/midterm]1;..piler/midterm]7;file://VCT-Air.local/Users/tvince/Projects/ntnu-compiler/midterm\[0m[27m[24m[J[01;35mmidterm [01;35m% [00m[K[?1h=[?2004hsscanner exr_lex_test_data.txt[1m [0m[0m [1C exr_lex_test_data.txt[22D< exr_lex_test_data.txt[22D[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[?1l>[?2004l
+]2;scanner < exr_lex_test_data.txt]1;scannerzsh: command not found: scanner
+[1m[7m%[27m[1m[0m                                                                                                                              ]2;tvince@VCT-Air:~/Projects/ntnu-compiler/midterm]1;..piler/midterm]7;file://VCT-Air.local/Users/tvince/Projects/ntnu-compiler/midterm\[0m[27m[24m[J[01;35mmidterm [01;35m% [00m[K[?1h=[?2004hscanner < exr_lex_test_data.txt.scanner < exr_lex_test_data.txt[31D./scanner < exr_lex_test_data.txt[31D[?1l>[?2004l
+]2;./scanner < exr_lex_test_data.txt]1;./scannerReading from standard input...
+Token number = 1, value is "begin"
+Token number = 34, value is "declare"
+Token number = 5, value is "A"
+Token number = 13, value is ","
+Token number = 5, value is "I"
+Token number = 35, value is "as"
+Token number = 36, value is "integer"
+Token number = 12, value is ";"
+Token number = 34, value is "declare"
+Token number = 5, value is "B"
+Token number = 13, value is ","
+Token number = 5, value is "C"
+Token number = 13, value is ","
+Token number = 5, value is "D"
+Token number = 13, value is ","
+Token number = 5, value is "size"
+Token number = 35, value is "as"
+Token number = 37, value is "real"
+Token number = 12, value is ";"
+Token number = 34, value is "declare"
+Token number = 5, value is "PI"
+Token number = 12, value is ";"
+Token number = 34, value is "declare"
+Token number = 5, value is "LLL"
+Token number = 10, value is "("
+Token number = 6, value is "100"
+Token number = 11, value is ")"
+Token number = 35, value is "AS"
+Token number = 37, value is "REAL"
+Token number = 12, value is ";"
+Token number = 5, value is "PI"
+Token number = 14, value is ":="
+Token number = 7, value is "3.1416"
+Token number = 12, value is ";"
+Token number = 5, value is "B"
+Token number = 14, value is ":="
+Token number = 5, value is "PI"
+Token number = 17, value is "*"
+Token number = 5, value is "B"
+Token number = 17, value is "*"
+Token number = 5, value is "B"
+Token number = 15, value is "+"
+Token number = 5, value is "C"
+Token number = 18, value is "/"
+Token number = 5, value is "D"
+Token number = 15, value is "+"
+Token number = 8, value is "0.345E-6"
+Token number = 12, value is ";"
+Token number = 29, value is "FOR"
+Token number = 10, value is "("
+Token number = 5, value is "I"
+Token number = 14, value is ":="
+Token number = 6, value is "1"
+Token number = 30, value is "TO"
+Token number = 6, value is "100"
+Token number = 11, value is ")"
+Token number = 5, value is "C"
+Token number = 14, value is ":="
+Token number = 5, value is "LLL"
+Token number = 10, value is "("
+Token number = 5, value is "I"
+Token number = 11, value is ")"
+Token number = 15, value is "+"
+Token number = 5, value is "B"
+Token number = 17, value is "*"
+Token number = 5, value is "D"
+Token number = 16, value is "-"
+Token number = 5, value is "C"
+Token number = 12, value is ";"
+Token number = 31, value is "ENDFOR"
+Token number = 25, value is "IF"
+Token number = 10, value is "("
+Token number = 5, value is "C"
+Token number = 22, value is ">="
+Token number = 6, value is "10000"
+Token number = 11, value is ")"
+Token number = 26, value is "THEN"
+Token number = 4, value is "print"
+Token number = 10, value is "("
+Token number = 9, value is "Good!"
+Token number = 11, value is ")"
+Token number = 12, value is ";"
+Token number = 28, value is "ENDIF"
+Token number = 2, value is "end"
+Token number = 38, value is "EOF"
+End of the execution
+[1m[7m%[27m[1m[0m                                                                                                                              ]2;tvince@VCT-Air:~/Projects/ntnu-compiler/midterm]1;..piler/midterm]7;file://VCT-Air.local/Users/tvince/Projects/ntnu-compiler/midterm\[0m[27m[24m[J[01;35mmidterm [01;35m% [00m[K[?1h=[?2004h./scanner < exr_lex_test_data.txt[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C[1C_.txtb.txta.txtd.txt[?1l>[?2004l
+]2;./scanner < exr_lex_test_data_bad.txt]1;./scannerReading from standard input...
+Token number = 1, value is "begin"
+Token number = 34, value is "declare"
+Token number = 5, value is "Val"
+Token number = 35, value is "as"
+Token number = 36, value is "integer"
+Token number = 12, value is ";"
+Token number = 34, value is "declare"
+Token number = 5, value is "Str"
+Token number = 35, value is "as"
+Token number = 37, value is "real"
+Token number = 12, value is ";"
+Token number = 5, value is "Val"
+Token number = 14, value is ":="
+Token number = 6, value is "100"
+Token number = 12, value is ";"
+Token number = 5, value is "Str"
+Token number = 14, value is ":="
+Token number = 5, value is "Val"
+Lexical Error on line 8, column 14: Illegal token '#'
+[1m[7m%[27m[1m[0m                                                                                                                              ]2;tvince@VCT-Air:~/Projects/ntnu-compiler/midterm]1;..piler/midterm]7;file://VCT-Air.local/Users/tvince/Projects/ntnu-compiler/midterm\[0m[27m[24m[J[01;35mmidterm [01;35m% [00m[K[?1h=[?2004h./scanner < exr_lex_test_data_bad.txt[1C.txt .txt .txt u.txtn.txtt.txte.txtr.txtm.txti.txtnated_string_ot.txt[1C[1C.txt .txt e.txto.txtf.txt[4C[1m [0m[0m [1C[1C.txt .txt .txt n.txte.txtwline.txt[1m [0m[0m [?1l>[?2004l
+]2;./scanner < exr_lex_test_data_unterminated_string_newline.txt]1;./scannerReading from standard input...
+Token number = 1, value is "begin"
+Token number = 4, value is "write"
+Token number = 10, value is "("
+Lexical Error on line 4, column 37: Unterminated string literal starting on line 3, column 9
+[1m[7m%[27m[1m[0m                                                                                                                              ]2;tvince@VCT-Air:~/Projects/ntnu-compiler/midterm]1;..piler/midterm]7;file://VCT-Air.local/Users/tvince/Projects/ntnu-compiler/midterm\[0m[27m[24m[J[01;35mmidterm [01;35m% [00m[K[?1h=[?2004h./scanner < exr_lex_test_data_unterminated_string_newline.txt[1C.txt .txt .txt .txt .txt .txt .txt e.txto.txtf.txt[?1l>[?2004l
+]2;./scanner < exr_lex_test_data_unterminated_string_eof.txt]1;./scannerReading from standard input...
+Token number = 1, value is "begin"
+Token number = 4, value is "write"
+Token number = 10, value is "("
+Lexical Error: Unterminated string literal starting on line 3, column 9 (reached EOF)
+Token number = 38, value is "EOF"
+[1m[7m%[27m[1m[0m                                                                                                                              ]2;tvince@VCT-Air:~/Projects/ntnu-compiler/midterm]1;..piler/midterm]7;file://VCT-Air.local/Users/tvince/Projects/ntnu-compiler/midterm\[0m[27m[24m[J[01;35mmidterm [01;35m% [00m[K[?1h=[?2004heexit[?1l>[?2004l
+]2;exit]1;exit
+Script done on Thu Apr  3 00:28:38 2025

@@ -1,0 +1,14 @@
+%%Test for type conversion between int and real
+
+Program ConversionTest
+
+Begin
+  declare i, j as integer;
+  declare r, s as real;
+
+  i := 10;
+  r := 3.14;
+
+  j := i + r;  %% This should cause implicit conversion
+  s := i * r;  %% This should cause implicit conversion
+end

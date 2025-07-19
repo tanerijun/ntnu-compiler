@@ -1,0 +1,14 @@
+%% Test file with lexical errors
+
+begin
+  declare Val as integer;
+  declare Str as real; %% 'real' is okay
+
+  Val := 100;
+  Str := Val # 5.0;  %% Invalid character '#'
+
+  write("Result:"); %% Valid string
+
+  write("Unterminated string -> ); %% Unterminated string
+
+end

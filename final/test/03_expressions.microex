@@ -1,0 +1,18 @@
+%%Test for complex expressions
+
+Program ExprTest
+
+Begin
+  declare a, b, c, result as integer;
+  declare x, y, z as real;
+
+  a := 5;
+  b := 10;
+  c := 2;
+
+  result := a + b * c - (a + b) / c;
+
+  x := 3.14;
+  y := 2.71;
+  z := (x + y) * (x - y) / (x * y);
+end

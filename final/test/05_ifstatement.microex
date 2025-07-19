@@ -1,0 +1,20 @@
+%%Test for if statements
+
+Program IfTest
+
+Begin
+  declare a, b, max as integer;
+
+  a := 10;
+  b := 20;
+
+  if (a > b) then
+    max := a;
+  else
+    max := b;
+  endif
+
+  if (a == b) then
+    max := 0;
+  endif
+end

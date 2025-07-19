@@ -1,0 +1,20 @@
+%%Test for operator precedence
+
+Program PrecedenceTest
+
+Begin
+  declare a, b, c, d, result as integer;
+
+  a := 5;
+  b := 3;
+  c := 2;
+  d := 4;
+
+  %% Test different combinations of operators
+  result := a + b * c;  %% Should be 5 + (3*2) = 11
+  result := a * b + c;  %% Should be (5*3) + 2 = 17
+  result := a + b - c * d;  %% Should be 5 + 3 - (2*4) = 0
+  result := (a + b) * (c + d);  %% Should be (5+3) * (2+4) = 8*6 = 48
+  result := -a + b * c;  %% Should be (-5) + (3*2) = -5 + 6 = 1
+  result := a * -b + c;  %% Should be 5 * (-3) + 2 = -15 + 2 = -13
+end

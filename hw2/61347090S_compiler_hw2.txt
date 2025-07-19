@@ -1,0 +1,94 @@
+Note:
+- Please read using monospaced font or using a code editor
+- Screen width should ideally be at least 100 characters for a more pleasant reading experience
+
+Problem 1:
+BEGIN A:=B-(C-D); END SCANEOF
+
+Solution:
+```
+system_goal()
+    program()
+        #start                                   // Initialize
+        match(BEGIN)
+        statement_list()
+            statement()
+                ident()
+                    match(ID)                    // A
+                    #process_id                  // Create expr_rec for A
+                match(ASSIGNOP)
+                expression(&result)              // Will store final result
+                    primary(&left_operand)
+                        ident()
+                            match(ID)            // B
+                            #process_id          // Create expr_rec for B
+                    add_op(&op)
+                        match(MINUSOP)
+                        #process_op              // Create op_rec for MINUS
+                    primary(&right_operand)
+                        match(LPAREN)
+                        expression(&sub_result)
+                            primary(&left_operand)
+                                ident()
+                                    match(ID)    // C
+                                    #process_id  // Create expr_rec for C
+                            add_op(&op)
+                                match(MINUSOP)
+                                #process_op      // Create op_rec for MINUS
+                            primary(&right_operand)
+                                ident()
+                                    match(ID)    // D
+                                    #process_id  // Create expr_rec for D
+                            #gen_infix           // Generate Temp&1 = C-D
+                        match(RPAREN)
+                    #gen_infix                   // Generate Temp&2 = B-Temp&1
+                #assign                          // Generate Store Temp&2,A
+                match(SEMICOLON)
+        match(END)
+    match(SCANEOF)
+    #finish                                      // Generate Halt
+```
+
+Generated assembly code:
+```
+Declare A,Integer
+Declare B,Integer
+Declare C,Integer
+Declare D,Integer
+Declare Temp&1,Integer
+Declare Temp&2,Integer
+Sub C,D,Temp&1
+Sub B,Temp&1,Temp&2
+Store Temp&2,A
+Halt
+```
+
+Problem 2:
+BEGIN A:=B-+C; END SCANEOF
+
+Solution:
+```
+system_goal()
+    program()
+        #start
+        match(BEGIN)
+        statement_list()
+            statement()
+                ident()
+                    match(ID)                    // A
+                    #process_id                  // Create expr_rec for A
+                match(ASSIGNOP)
+                expression(&result)
+                    primary(&left_operand)
+                        ident()
+                            match(ID)            // B
+                            #process_id          // Create expr_rec for B
+                    add_op(&op)
+                        match(MINUSOP)
+                        #process_op              // Create op_rec for MINUS
+                    primary(&right_operand)
+                        // Error because we're expecting primary (LPAREN || ID || INTLITERAL), but found PLUSOP
+                        syntax_error(tok)
+
+ERROR: Syntax error - unexpected PLUSOP token
+```

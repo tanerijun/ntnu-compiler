@@ -1,0 +1,95 @@
+Script started on Tue 26 Mar 2013 11:27:43 CST
+ghhwang@telnet:~/Programs$ cat scanner_example.l
+%{
+/*
+ * this sample demonstrates (very) simple recognition:
+ * a verb/not a verb.
+ */
+
+%}
+%%
+
+[\t ]+		/* ignore white space */ ;
+
+is |
+am |
+are |
+were |
+was |
+be |
+being |
+been |
+do |
+does |
+did |
+will |
+would |
+should |
+can |
+could |
+has |
+have |
+had |
+go		{
+		return 1; }
+
+[a-zA-Z]+ 	{ return 2; }
+
+.|\n     	{  
+                    /* normal default anyway */ }
+%%
+
+main()
+{
+ int i;
+ 
+ while ((i=yylex())!=0)
+ {
+ printf("return value is %d, token is %s\n", i,yytext);
+ }
+
+ printf("End of file\n");
+
+
+
+}
+
+
+
+ghhwang@telnet:~/Programs$ ls
+a1.out	   ch3-01a	in.txt		   scn1.l
+a.out	   ch3-01a.y	k2.y		   scn2.l
+ape-05.l   ch3-01.l	kkk		   second
+ape-06.l   ch3-01.y	lex_lookahead2.l   sql1.y
+ch1-01.l   ch3-02	lex_lookahead.l    sql2.y
+ch1-02.l   ch3-02a.y	lex.yy.c	   sqltext.c
+ch1-03.l   ch3-02.y	libfl.a		   subr.c
+ch1-04.l   ch3-03	liby.a		   t1
+ch1-05.l   ch3-03a.y	lll		   t1.y
+ch1-05.y   ch3-03.l	magic.input	   t2
+ch1-05y.h  ch3-03v.y	Makefile	   test1.y
+ch1-06.l   ch3-03.y	mgl-code	   test.l
+ch1-06.y   ch3-04.l	mgl-in		   test_lex_return.l
+ch1-06y.h  ch3-04.y	mgllex.l	   test.y
+ch2-01.l   ch3-05.l	mglyac.y	   text
+ch2-02.l   ch3-05.y	mmain.c		   ttt
+ch2-03.l   ch3-06.y	mypro		   utput
+ch2-04.l   ch3hdr2.h	myReport	   utput.h
+ch2-05.l   ch3hdr.h	MyReport	   WC
+ch2-06.l   data		myresult	   y.output
+ch2-07.l   ErrHandling	output		   y.tab.c
+ch2-08.l   execution	result		   y.tab.h
+ch2-09.l   first	sample.c
+ch3-01	   input	scanner_example.l
+ghhwang@telnet:~/Programs$ lex scanner_example.l 
+ghhwang@telnet:~/Programs$ !gcc
+gcc lex.yy.c -lfl
+ghhwang@telnet:~/Programs$ ./a.out<data
+return value is 1, token is is
+return value is 1, token is was
+return value is 2, token is Mary
+End of file
+ghhwang@telnet:~/Programs$ exit
+exit
+
+Script done on Tue 26 Mar 2013 11:28:26 CST

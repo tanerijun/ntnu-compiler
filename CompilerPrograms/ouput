@@ -1,0 +1,26 @@
+Script started on Mon 18 Mar 2024 04:18:15 PM CST
+ghhwang@telnet:~/CompilerPrograms$ more sample.c
+/*
+ * sample source code
+ */
+
+main()	/* main program */
+{
+	int a,b,c;
+	
+	/* do some arithmetic */
+	a = b + c; /* this should be
+		initialized, but it's just an example */
+
+        printf("I love compiler course\n");
+
+}
+ghhwang@telnet:~/CompilerPrograms$ gcc sample.c
+sample.c: In function ‘main’:
+sample.c:13:9: warning: incompatible implicit declaration of built-in function ‘printf’
+ghhwang@telnet:~/CompilerPrograms$ ./a.out
+I love compiler course
+ghhwang@telnet:~/CompilerPrograms$ exit
+exit
+
+Script done on Mon 18 Mar 2024 04:18:55 PM CST

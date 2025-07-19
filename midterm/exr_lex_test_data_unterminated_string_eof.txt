@@ -1,0 +1,3 @@
+%% Test unterminated string hitting End-Of-File
+begin
+  write("This string goes to the very end

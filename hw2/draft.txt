@@ -1,0 +1,460 @@
+Problem 1: BEGIN A:=B-(C-D); END SCANEOF
+Ans:
+system_goal();
+    program();
+        #start
+        match(BEGIN);
+        statement_list();
+            statement();
+                match(ID);
+                match(ASSIGNOP);
+                expression();
+                    primary();
+                        match(ID);
+                        break;
+                    while(next_token() == PLUSOP || next_token() == MINUSOP)
+                        add_op();
+                            match(MINUSOP);
+                            #process_op
+                        primary();
+                            match(LPAREN);
+                            expression();
+                                primary();
+                                    match(ID);
+                                    break;
+                                while(next_token() == PLUSOP || next_token() == MINUSOP)
+                                    add_op();
+                                        match(MINUSOP);
+                                        #process_op
+                                    primary();
+                                        match(ID);
+                                        break;
+                            match(RPAREN);
+                            break;
+                match(SEMICOLON);
+            while(TRUE)
+                return;
+        match(END);
+    match(SCANEOF);
+    #finish
+
+Problem 2: BEGIN A:=B-+C; END SCANEOF
+
+
+Recursive descent parsing
+- If a nonterminal has several productions, choose an appropriate one based on the next input token.
+- Parser is started by invoking system_goal().
+
+void system_goal(void) {
+    program();
+    match(SCANEOF);
+}
+
+void program(void) {
+    match(BEGIN);
+    statement_list();
+    match(END);
+}
+
+void statement_list(void) {
+    statement();
+    while(TRUE) {
+        switch (next_token()) {
+            case ID:
+            case READ:
+            case WRITE:
+                statement();
+                break;
+            default:
+                return;
+        }
+    }
+}
+
+void statement(void) {
+    token tok = next_token();
+    switch(tok) {
+        case ID:
+            match(ID);
+            match(ASSIGNOP);
+            expression();
+            match(SEMICOLON);
+            break;
+        case READ:
+            match(READ);
+            match(LPAREN);
+            match(ID);
+            match(RPAREN);
+            match(SEMICOLON);
+            break;
+        case WRITE:
+            match(WRITE);
+            match(LPAREN);
+            expr_list();
+            match(RPAREN);
+            match(SEMICOLON);
+            break;
+        default:
+            syntax_error(tok);
+            break;
+    }
+}
+
+void id_list(void) {
+    match(ID);
+    while(next_token() == COMMA) {
+        match(COMMA);
+        match(ID);
+    }
+}
+
+void expression(void) {
+    token t;
+    primary();
+    for (t = next_token(); t == PLUSOP || t == MINUSOP; t = next_token()) {
+        add_op();
+        primary();
+    }
+}
+
+void expr_list(void) {
+    expression();
+    while(next_token() == COMMA) {
+        match(COMMA);
+        expression();
+    }
+}
+
+void add_op(void) {
+    token t = next_token();
+    if (t == PLUSOP || t == MINUSOP) {
+        match(t);
+    } else {
+        syntax_error(t);
+    }
+}
+
+void primary(void) {
+    token tok = next_token();
+    switch(tok) {
+        case LPAREN:
+            match(LPAREN);
+            expression();
+            match(RPAREN);
+            break;
+        case ID:
+            match(ID);
+            break;
+        case INTLINTERAL:
+            match(INTLINTERAL);
+            break;
+        default:
+            syntax_error(tok);
+            break;
+    }
+}
+
+Translating MICRO
+Target language: 3-addr code (quadruple)
+OP  A, B, C
+Note that we did not worry about registers at this time.
+temporaries: Sometimes we need to hold temporary values.
+E.g.  A+B+C
+ADD A,B,TEMP&1
+ADD TEMP&1,C,TEMP&2
+
+Action Symbols
+- The bulk of a translation is done by semantic routine
+- Action symbols can be added to a grammar to specify when semantic processing should take place
+- Be placed anywhere in the RHS of a production
+- translated into procedure call in the parsing procedures
+- #add corresponds to a semantic routine named add()
+- No impact on the languages recognized by a parser driven by a CFG
+
+Grammar for micro and action symbols
+<program> -> #start begin <statement list> end
+<statement list> -> <statement> {<statement>}
+<statement> -> <ident> := <expression> #assign;
+<statement> -> read (<id list>);
+<statement> -> write (<expr list>);
+<id list> -> <ident> #read_id{, <ident> #read_id}
+<expr list> -> <expression> #write_expr {, <expression> #write_expr}
+<expression> -> <primary> {<add_op> <primary> #gen_infix}
+<primary> -> (<expression>)
+<primary> -> <ident>
+<primary> -> INTLITERAL #process_literal
+<add_op> -> PLUSOP #process_op
+<add_op> -> MINUSOP #process_op
+<ident> -> ID #process_id
+<system goal> -> <program> SCANEOF #finish
+
+Semantic Information
+- Semantic routines need certain information to do their work. These information is stored in semantic records. Each kind of grammar symbol has a semantic record.
+
+#define MAXIDLEN
+typedef char string[MAXIDLEN];
+
+typedef struct operator {
+    enum_op { PLUS, MINUS } operator;
+} op_rec;
+
+enum expr { IDEXPR, LITERALEXPR, TEMPEXPR };
+
+typedef struct expression {
+    enum expr kind;
+    union {
+        string name;
+        int val;
+    };
+} expr_rec;
+
+// New parsing procedure which involved semantic routines
+void expression(expr_rec *result) {
+    expr_rec left_operand, right_operand;
+    op_rec op;
+
+    primary (& left_operand);
+    while (next_token() == PLUSOP || next_token() == MINUSOP) {
+        add_op(&op);
+        primary (& right_operand);
+        left_operand = gen_infix(left_operand, op, right_operand);
+    }
+    *result = left_operand;
+}
+
+Subroutines for symbol table and temporaries
+extern int lookup(string s);
+
+extern void enter(string s);
+
+void check_id(string s) {
+    if (!lookup(s)) {
+        enter(s);
+        generate("Declare", s, "Integer", "");
+    }
+}
+
+char *get_temp(void) {
+    static int max_temp = 0;
+    static char tempname[MAXIDLEN];
+
+    max_temp++;
+    sprintf(tempname, "Temp%d", max_temp);
+    check_id(tempname);
+    return tempname;
+}
+
+Semantic routines
+void start(void) {
+    /* Semantic initializations, none needed. */
+}
+
+void finish(void) {
+    generate("Halt", "", "", "");
+}
+
+void assign(expr_rec target, expr_rec source) {
+    generate("Store", extract(source), target.name, "");
+}
+
+op_rec process_op(void)
+{
+    /* Produce operator descriptor. */
+    op_rec o;
+
+    if (current_token == PLUSOP)
+        o.operator = PLUS;
+    else
+        o.operator = MINUS;
+    return o;
+}
+
+expr_rec gen_infix(expr_rec e1, op_rec op, expr_rec e2)
+{
+    expr_rec e_rec;
+    /* An expr_rec with temp variant set. */
+    e_rec.kind = TEMPEXPR;
+
+    /*
+     * Generate code for infix operation.
+     * Get result temp and set up semantic record
+     * for result.
+     */
+    strcpy(erec.name, get_temp());
+    generate(extract(op), extract(e1),
+             extract(e2), erec.name);
+    return erec;
+}
+
+void read_id(expr_rec in_var)
+{
+    /* Generate code for read. */
+    generate("Read", in_var.name, "Integer", "");
+}
+
+expr_rec process_id(void)
+{
+    expr_rec t;
+
+    /*
+     * Declare ID and build a
+     * corresponding semantic record.
+     */
+    check_id(token_buffer);
+    t.kind = IDEXPR;
+    strcpy(t.name, token_buffer);
+    return t;
+}
+
+expr_rec process_literal(void)
+{
+    expr_rec t;
+
+    /*
+     * Convert literal to a numeric representation
+     * and build semantic record.
+     */
+    t.kind = LITERALEXPR;
+    (void) sscanf(token_buffer, "%d", &t.val);
+    return t;
+}
+
+void write_expr(expr_rec out_expr)
+{
+    generate("Write", extract(out_expr), "Integer", "");
+}
+
+Example of parsing process:
+```
+Step  Parser Action                 Remaining Input                   Generated Code
+----  ---------------------------   -------------------------------   --------------------------
+(1)   Call system_goal()           begin A:=BB-314+A ; end SCANEOF
+(2)   Call program()               begin A:=BB-314+A ; end SCANEOF
+(3)   Semantic Action: start()     begin A:=BB-314+A ; end SCANEOF
+(4)   match(BEGIN)                 begin A:=BB-314+A ; end SCANEOF
+(5)   Call statement_list()        A:=BB-314+A ; end SCANEOF
+(6)   Call statement()             A:=BB-314+A ; end SCANEOF
+(7)   Call ident()                 A:=BB-314+A ; end SCANEOF
+(8)   match(ID)                    A:=BB-314+A ; end SCANEOF
+(9)   Semantic Action:             :=BB-314+A ; end SCANEOF          Declare A,Integer
+      process_id()
+(10)  match(ASSIGNOP)              :=BB-314+A ; end SCANEOF
+(11)  Call expression()            BB-314+A ; end SCANEOF
+(12)  Call primary()               BB-314+A ; end SCANEOF
+(13)  Call ident()                 BB-314+A ; end SCANEOF
+(14)  match(ID)                    BB-314+A ; end SCANEOF
+(15)  Semantic Action:             -314+A ; end SCANEOF              Declare BB,Integer
+      process_id()
+(16)  Call add_op()                -314+A ; end SCANEOF
+(17)  match(MINUSOP)               -314+A ; end SCANEOF
+(18)  Semantic Action:             314+A ; end SCANEOF
+      process_op()
+(19)  Call primary()               314+A ; end SCANEOF
+(20)  match(INTLITERAL)            314+A ; end SCANEOF
+(21)  Semantic Action:             +A ; end SCANEOF
+      process_literal()
+(22)  Semantic Action:             +A ; end SCANEOF                  Declare Temp&1,Integer
+      gen_infix()                                                    Sub BB,314,Temp&1
+(23)  Call add_op()                +A ; end SCANEOF
+(24)  match(PLUSOP)                +A ; end SCANEOF
+(25)  Semantic Action:             A ; end SCANEOF
+      process_op()
+(26)  Call primary()               A ; end SCANEOF
+(27)  Call ident()                 A ; end SCANEOF
+(28)  match(ID)                    A ; end SCANEOF
+(29)  Semantic Action:             ; end SCANEOF
+      process_id()
+(30)  Semantic Action:             ; end SCANEOF                     Declare Temp&2,Integer
+      gen_infix()                                                    Add Temp&1,A,Temp&2
+(31)  Semantic Action: assign()    ; end SCANEOF                     Store Temp&2,A
+(32)  match(SEMICOLON)             ; end SCANEOF
+(33)  match(END)                   end SCANEOF
+(34)  match(SCANEOF)               SCANEOF
+(35)  Semantic Action: finish()                                      Halt
+```
+
+Solution:
+(1)
+```
+system_goal()
+    program()
+        #start                                   // Initialize
+        match(BEGIN)
+        statement_list()
+            statement()
+                ident()
+                    match(ID)                    // A
+                    #process_id                  // Create expr_rec for A
+                match(ASSIGNOP)
+                expression(&result)              // Will store final result
+                    primary(&left_operand)
+                        ident()
+                            match(ID)            // B
+                            #process_id          // Create expr_rec for B
+                    add_op(&op)
+                        match(MINUSOP)
+                        #process_op              // Create op_rec for MINUS
+                    primary(&right_operand)
+                        match(LPAREN)
+                        expression(&sub_result)
+                            primary(&left_operand)
+                                ident()
+                                    match(ID)    // C
+                                    #process_id  // Create expr_rec for C
+                            add_op(&op)
+                                match(MINUSOP)
+                                #process_op      // Create op_rec for MINUS
+                            primary(&right_operand)
+                                ident()
+                                    match(ID)    // D
+                                    #process_id  // Create expr_rec for D
+                            #gen_infix          // Generate Temp&1 = C-D
+                        match(RPAREN)
+                    #gen_infix                  // Generate Temp&2 = B-Temp&1
+                #assign                         // Generate Store Temp&2,A
+                match(SEMICOLON)
+        match(END)
+    match(SCANEOF)
+    #finish                                    // Generate Halt
+```
+
+Generated assembly:
+```
+Declare A,Integer
+Declare B,Integer
+Declare C,Integer
+Declare D,Integer
+Declare Temp&1,Integer
+Declare Temp&2,Integer
+Sub C,D,Temp&1
+Sub B,Temp&1,Temp&2
+Store Temp&2,A
+Halt
+```
+
+(2)
+```
+system_goal()
+    program()
+        #start
+        match(BEGIN)
+        statement_list()
+            statement()
+                ident()
+                    match(ID)                    // A
+                    #process_id                  // Create expr_rec for A
+                match(ASSIGNOP)
+                expression(&result)
+                    primary(&left_operand)
+                        ident()
+                            match(ID)            // B
+                            #process_id          // Create expr_rec for B
+                    add_op(&op)
+                        match(MINUSOP)
+                        #process_op              // Create op_rec for MINUS
+                    primary(&right_operand)
+                        // Error because we're expecting primary but found PLUSOP
+                        // Will call syntax_error() because PLUSOP is not a valid
+
+ERROR: Syntax error - unexpected PLUSOP token
+```

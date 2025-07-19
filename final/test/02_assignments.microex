@@ -1,0 +1,15 @@
+%%Test for assignment statements
+
+Program AssignTest
+
+Begin
+  declare a, b, c as integer;
+  declare x, y as real;
+
+  a := 5;
+  b := 10;
+  c := a + b;
+
+  x := 3.14;
+  y := x * 2.0;
+end

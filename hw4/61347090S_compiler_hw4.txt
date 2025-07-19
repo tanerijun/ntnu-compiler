@@ -1,0 +1,91 @@
+Code:
+```
+%{
+/*
+ * this sample demonstrates (very) simple recognition:
+ * a verb/not a verb.
+ */
+
+%}
+%%
+
+[\t ]+          /* ignore white space */ ;
+
+[iI][sS] |
+[aA][mM] |
+[aA][rR][eE] |
+[wW][eE][rR][eE] |
+[wW][aA][sS] |
+[bB][eE] |
+[bB][eE][iI][nN][gG] |
+[bB][eE][eE][nN] |
+[dD][oO] |
+[dD][oO][eE][sS] |
+[dD][iI][dD] |
+[wW][iI][lL][lL] |
+[wW][oO][uU][lL][dD] |
+[sS][hH][oO][uU][lL][dD] |
+[cC][aA][nN] |
+[cC][oO][uU][lL][dD] |
+[hH][aA][sS] |
+[hH][aA][vV][eE] |
+[hH][aA][dD] |
+[gG][oO]                { printf("%s: is a verb\n", yytext); }
+
+[a-zA-Z]+       { printf("%s: is not a verb\n", yytext); }
+
+.|\n            { ECHO;
+                    /* normal default anyway */ }
+%%
+
+main()
+{
+ yylex();
+}
+```
+
+Result (recorded with `script`):
+```
+Script started on Mon 24 Mar 2025 06:14:27 PM CST
+61347090S@telnet:~/hw$ ls
+61347090S_hw4.txt  ch1-02.l
+61347090S@telnet:~/hw$ lex ch1-02.l
+61347090S@telnet:~/hw$ ls
+61347090S_hw4.txt  ch1-02.l  lex.yy.c
+61347090S@telnet:~/hw$ gcc -o case-insensitive-version lex.yy.c -lfl
+61347090S@telnet:~/hw$ ls
+61347090S_hw4.txt  case-insensitive-version  ch1-02.l  lex.yy.c
+61347090S@telnet:~/hw$ ./case-insensitive-version
+is
+is: is a verb
+
+Is
+Is: is a verb
+
+iS
+iS: is a verb
+
+haVe
+haVe: is a verb
+
+HAVE
+HAVE: is a verb
+
+haVE
+haVE: is a verb
+
+beIng
+beIng: is a verb
+
+beING
+beING: is a verb
+
+notverb
+notverb: is not a verb
+
+^C
+61347090S@telnet:~/hw$ exit
+exit
+
+Script done on Mon 24 Mar 2025 06:15:49 PM CST
+```

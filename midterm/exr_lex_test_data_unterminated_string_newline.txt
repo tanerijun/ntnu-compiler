@@ -1,0 +1,5 @@
+%% Test unterminated string hitting a newline character
+begin
+  write("This string is not closed.
+  declare next_var as integer; %% This line will be confusing if scanner doesn't exit
+end

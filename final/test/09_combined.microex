@@ -1,0 +1,39 @@
+%%Test combining multiple language features
+
+Program CombinedTest
+
+Begin
+  declare i, count, max as integer;
+  declare values[10] as integer;
+  declare avg, sum as real;
+
+  %% Initialize array
+  for (i := 0 to 9)
+    values[i] := i * i;
+  endfor
+
+  %% Calculate sum
+  sum := 0.0;
+  for (i := 0 to 9)
+    sum := sum + values[i];
+  endfor
+
+  %% Calculate average
+  avg := sum / 10.0;
+
+  %% Find max value
+  max := values[0];
+  for (i := 1 to 9)
+    if (values[i] > max) then
+      max := values[i];
+    endif
+  endfor
+
+  %% Count values above average
+  count := 0;
+  for (i := 0 to 9)
+    if (values[i] > avg) then
+      count := count + 1;
+    endif
+  endfor
+end

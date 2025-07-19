@@ -1,0 +1,7 @@
+%%Test for print statements
+
+Program testPrint
+
+Begin
+    print(2, 1, 4);
+End

@@ -1,0 +1,8 @@
+%%Test for variable declarations
+
+Program DeclTest
+
+Begin
+  declare a, b, c as integer;
+  declare x, y, z[10] as real;
+end

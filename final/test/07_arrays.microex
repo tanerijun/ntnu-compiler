@@ -1,0 +1,17 @@
+%%Test for array declarations and access
+
+Program ArrayTest
+
+Begin
+  declare i as integer;
+  declare arr[10] as integer;
+  declare matrix[20] as real;
+
+  i := 5;
+
+  arr[0] := 100;
+  arr[i] := arr[0] * 2;
+
+  matrix[i+1] := 3.14;
+  matrix[i*2] := matrix[i+1] * 2.0;
+end
